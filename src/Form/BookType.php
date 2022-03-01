@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Book;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -44,6 +45,18 @@ class BookType extends AbstractType
                     new Assert\Length(['min' => 1, 'max' => 255]),
                     new Assert\NotBlank()
                 ]
+            ])
+            ->add('covers', FileType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'label' => 'Book covers',
+                'label_attr' => [
+                    'class' => 'form-label mt-4'
+                ],
+                'multiple' => true,
+                'mapped' => false, // not linked to the database
+                'required' => true
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

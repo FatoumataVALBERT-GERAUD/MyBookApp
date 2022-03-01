@@ -26,6 +26,7 @@
       <thead>
         <tr>
           <th scope="col">Id</th>
+          <th scope="col">Cover</th>
           <th scope="col">Title</th>
           <th scope="col">Author</th>
           <th scope="col">Creation date</th>
@@ -37,6 +38,7 @@
         {% for book in books %}
             <tr class="table-secondary">
               <th scope="row">{{ book.id }}</th>
+              {# <td>{{ book.covers.name }}</td> #}
               <td>{{ book.name }}</td>
               <td>{{ book.author }}</td>
               <td>{{ book.createdAt|date("d/m/Y") }}</td>

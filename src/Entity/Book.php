@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BookRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,12 +31,16 @@ class Book
     #[Assert\NotNull()]
     private DateTimeImmutable $createdAt;
 
+    #[ORM\OneToMany(mappedBy: 'book', targetEntity: Covers::class, orphanRemoval: true, cascade: ["persist"])]
+    private $covers;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
+        $this->covers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,6 +80,36 @@ class Book
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Covers>
+     */
+    public function getCovers(): Collection
+    {
+        return $this->covers;
+    }
+
+    public function addCover(Covers $cover): self
+    {
+        if (!$this->covers->contains($cover)) {
+            $this->covers[] = $cover;
+            $cover->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCover(Covers $cover): self
+    {
+        if ($this->covers->removeElement($cover)) {
+            // set the owning side to null (unless already changed)
+            if ($cover->getBook() === $this) {
+                $cover->setBook(null);
+            }
+        }
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\Covers;
 use App\Form\BookType;
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManager;
@@ -54,6 +55,23 @@ class BookController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            // getting the uploaded image
+            $covers = $form->get('covers')->getData();
+            // loop on the covers
+            foreach ($covers as $cover) {
+                // file name generation
+                $file = md5(uniqid()) . '.' . $cover->guessExtension();
+                // copy the file in uploads folder
+                $cover->move(
+                    $this->getParameter('covers_directory'),
+                    $file
+                );
+                // save the cover name in database
+                $cov = new Covers();
+                $cov->setName($file);
+                $book->addCover($cov);
+            }
+
             $book = $form->getData();
 
             $manager->persist($book);
@@ -83,6 +101,22 @@ class BookController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $book = $form->getData();
+            // getting the uploaded image
+            $covers = $form->get('covers')->getData();
+            // loop on the covers
+            foreach ($covers as $cover) {
+                // file name generation
+                $file = md5(uniqid()) . '.' . $cover->guessExtension();
+                // copy the file in uploads folder
+                $cover->move(
+                    $this->getParameter('covers_directory'),
+                    $file
+                );
+                // save the cover name in database
+                $cov = new Covers();
+                $cov->setName($file);
+                $book->addCover($cov);
+            }
 
             $manager->persist($book);
             $manager->flush();
