@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class BookController extends AbstractController
 {
     /**
-     * This controller display all books
+     * This controller display all  the books in the booklist
      *
      * @param BookRepository $repository
      * @param PaginatorInterface $paginator
@@ -39,7 +39,7 @@ class BookController extends AbstractController
     }
 
     /**
-     * This controller display a form that create a new book
+     * This controller display a form that add a new book
      *
      * @param Request $request
      * @param EntityManagerInterface $manager
@@ -79,11 +79,11 @@ class BookController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Your book has been created with success !'
+                'Your book has been added with success !'
             );
 
             return $this->redirectToRoute('book.index');
-            
+
         }
 
         return $this->render('pages/book/new.html.twig', [
@@ -127,9 +127,9 @@ class BookController extends AbstractController
             );
 
             return $this->redirectToRoute('book.index');
-            
+
         }
-        
+
         $form = $this->createForm(BookType::class, $book);
 
         return $this->render('pages/book/edit.html.twig', [

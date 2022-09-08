@@ -4,11 +4,11 @@
 
 {% block body %}
 <div class="container mt-4">
-   {% if not books.items is same as([]) %} 
+   {% if not books.items is same as([]) %}
     <h1>My books</h1>
 
-    <a href="{{ path('book.new') }}" class="btn btn-primary">
-    Create a book
+    <a href="{{ path('book.new') }}" class="btn btn-outline-primary">
+    Add a book
     </a>
 
     {# reand and display just one flash messae type #}
@@ -19,26 +19,23 @@
       {% endfor %}
 
     <div class="fs-4 count mt-4">
-    There is {{ books.getTotalItemCount }} books in total.
+    There is {{ books.getTotalItemCount }} books in your booklist.
     </div>
 
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Cover</th>
           <th scope="col">Title</th>
           <th scope="col">Author</th>
           <th scope="col">Creation date</th>
           <th scope="col">Edit</th>
           <th scope="col">Delete</th>
+          <th scope="col">Read</th>
         </tr>
       </thead>
       <tbody>
         {% for book in books %}
-            <tr class="table-secondary">
-              <th scope="row">{{ book.id }}</th>
-              {# <td>{{ book.covers.name }}</td> #}
+            <tr class="table-light">
               <td>{{ book.name }}</td>
               <td>{{ book.author }}</td>
               <td>{{ book.createdAt|date("d/m/Y") }}</td>
@@ -47,6 +44,9 @@
               </td>
               <td>
               <a href="{{ path('book.delete', { id: book.id}) }}" class="btn btn-danger">Delete</a>
+              </td>
+              <td>
+              <input type="checkbox">
               </td>
             </tr>
         {% endfor %}

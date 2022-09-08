@@ -62,7 +62,7 @@ class BookType extends AbstractType
                 'attr' => [
                     'class' => 'btn btn-primary mt-4'
                 ],
-                'label' => 'Create a book'
+                'label' => 'Add a book'
             ]);
     }
 
