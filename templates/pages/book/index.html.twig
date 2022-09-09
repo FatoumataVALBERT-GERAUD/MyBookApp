@@ -22,7 +22,7 @@
     There is {{ books.getTotalItemCount }} books in your booklist.
     </div>
 
-    <table class="table table-hover">
+    {# <table class="table table-hover">
       <thead>
         <tr>
           <th scope="col">Title</th>
@@ -33,8 +33,22 @@
           <th scope="col">Read</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody> #}
+      
+
         {% for book in books %}
+
+            <div class="card border-primary mb-3" style="max-width: 20rem;">
+              <div class="card-header">Header</div>
+              <div class="card-body">
+                <h4 class="card-title">{{ book.name }}</h4>
+                <h5 class="card-subtitle">{{ book.author }}</h5>
+                <div class="card-footer text-muted">
+                  {{ book.createdAt|date("d/m/Y") }}
+                </div>
+              </div>
+            </div>
+{#
             <tr class="table-light">
               <td>{{ book.name }}</td>
               <td>{{ book.author }}</td>
@@ -48,10 +62,10 @@
               <td>
               <input type="checkbox">
               </td>
-            </tr>
+            </tr> #}
         {% endfor %}
-      </tbody>
-    </table>
+      {# </tbody>
+    </table> #}
     {# display navigation #}
     <div class="navigation d-flex justify-content-center mt-4">
         {{ knp_pagination_render(books) }}
