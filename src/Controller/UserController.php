@@ -20,6 +20,7 @@ class UserController extends AbstractController
      * @param User $user
      * @param Request $request
      * @param EntityManagerInterface $manager
+     * @param UserPasswordHasherInterface $hasher
      * @return Response
      */
     #[Route('/user/edit/{id}', name: 'user.edit', methods:['GET', 'POST'])]
@@ -88,20 +89,17 @@ class UserController extends AbstractController
             if($hasher->isPasswordValid($user, $form->getData()['plainPassword'])) {
                 $user->setUpdatedAt(new \DateTimeImmutable());
                 $user->setPlainPassword(
-                    $hasher->hashPassword(
-                        $user,
                         $form->getData()['newPassword']
-                    )
                 );
-
-                $manager->persist($user);
-                $manager->flush();
 
                 $this->addFlash(
                     'success',
                     'The password has been edited'
                 );
 
+                $manager->persist($user);
+                $manager->flush();
+                
                 return $this->redirectToRoute('booklist.index');
             }else{
                 $this->addFlash(
