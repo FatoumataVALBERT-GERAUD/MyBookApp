@@ -1,11 +1,13 @@
 {% extends "base.html.twig" %}
 
+{% block title %}MyBookApp - New book list{% endblock %}
+
 {% block body %}
     <div class="container mt-4">
 
-      <h1>Edit a book</h1>
+      <h1>Add a book list</h1>
 
-          {{ form_start(form) }}
+      {{ form_start(form) }}
 
       <div class="form-group">
         {{ form_label(form.name) }}
@@ -31,12 +33,9 @@
         </div>
       </div>
 
-      <div class="form-group">
-        {{ form_row(form.submit) }}
-      </div>
-  
-      </div>
-      {{ form_end(form) }}
-      </div>
+      {{ form_row(form.books) }}
 
+      {{ form_end(form) }}
+
+    </a>
 {% endblock %}

@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}MyBookApp - Books{% endblock %}
+{% block title %}MyBookApp - Book lists{% endblock %}
 
 {% block body %}
 <div class="container mt-4">
-   {% if not books.items is same as([]) %}
-    <h1>My books</h1>
+   {% if not booklists.items is same as([]) %}
+    <h1>My booklists</h1>
 
-    <a href="{{ path('book.new') }}" class="btn btn-outline-primary mt-4">
-    Add a book
+    <a href="{{ path('booklist.new') }}" class="btn btn-outline-primary mt-4">
+    Add a book list
     </a>
 
     {# read and display just one flash messae type #}
@@ -18,8 +18,8 @@
         </div>
       {% endfor %}
 
-    <div class="fs-4 count mt-4 mb-4">
-    There is {{ books.getTotalItemCount }} books in your bookshelf.
+    <div class="fs-4 count mt-4">
+    There is {{ booklists.getTotalItemCount }} book list.
     </div>
 
     {# <table class="table table-hover">
@@ -36,23 +36,24 @@
       <tbody> #}
 
       <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for book in books %}
+        {% for booklist in booklists %}
 
-          <div class="col">
-            <div class="card border-primary mb-3" style="max-width: 20rem">
-              <div class="card-header">Catégorie à rajouter</div>
-              <div class="card-body">
-                <h4 class="card-title">{{ book.name }}</h4>
-                <h5 class="card-subtitle">{{ book.author }}</h5>
-                <div class="card-footer text-muted">
-                  {{ book.createdAt|date("d/m/Y") }}
-                  <a href="{{ path('book.edit', { id: book.id}) }}" class="btn btn-info">Edit</a>
-                  <a href="{{ path('book.delete', { id: book.id}) }}" class="btn btn-danger">Delete</a>
+            <div class="col">
+                <div class="card border-primary mb-3" style="max-width: 20rem;">
+                  <div class="card-header">Nom type wishlist à rajouter</div>
+                  <div class="card-body">
+                    <h4 class="card-title">{{ booklist.name }}</h4>
+                    <p class="card-subtitle">{{ booklist.description }}</p>
+                    <div class="card-footer text-muted">
+                      {{ booklist.createdAt|date("d/m/Y") }}
+                      {{ booklist.updatedAt|date("d/m/Y") }}
+                      {% if booklist.isFavorite == 1 %}<i class="bi bi-heart-fill"></i>{% else %}<i class="bi bi-heart"></i>{% endif %}
+                      <a href="{{ path('booklist.edit', { id: booklist.id}) }}" class="btn btn-info">Edit</a>
+                      <a href="{{ path('booklist.delete', { id: booklist.id}) }}" class="btn btn-danger">Delete</a>
+                    </div>
+                  </div>
                 </div>
-              </div>
             </div>
-          </div>
-
 {#
             <tr class="table-light">
               <td>{{ book.name }}</td>
@@ -74,10 +75,10 @@
     </table> #}
     {# display navigation #}
     <div class="navigation d-flex justify-content-center mt-4">
-        {{ knp_pagination_render(books) }}
+        {{ knp_pagination_render(booklists) }}
     </div>
     {% else %}
-        <div class="fs-4">There is no books</div>
+        <div class="fs-4">There is no book lists</div>
     {% endif %}
 </div>
 {% endblock %}

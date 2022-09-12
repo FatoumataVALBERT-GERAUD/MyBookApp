@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class BookController extends AbstractController
 {
     /**
-     * This controller display all  the books in the booklist
+     * This controller display all  the books in the book list
      *
      * @param BookRepository $repository
      * @param PaginatorInterface $paginator
@@ -91,6 +91,14 @@ class BookController extends AbstractController
         ]);
     }
 
+    /**
+     * This Controller allow us to edit a book
+     *
+     * @param Book $book
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('book/edit/{id}', 'book.edit', methods: ['GET', 'POST'])]
     public function edit(
         Book $book,
@@ -137,6 +145,13 @@ class BookController extends AbstractController
         ]);
     }
 
+    /**
+     * This controller allow us to delete a book
+     *
+     * @param EntityManagerInterface $manager
+     * @param Book $book
+     * @return Response
+     */
     #[Route('/book/delete/{id}', 'book.delete', methods: ['GET'])]
     public function delete(
         EntityManagerInterface $manager,
