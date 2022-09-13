@@ -1,0 +1,15 @@
+.nav-item.dropdown {
+  margin-right: 5rem;
+}
+
+#books-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+body {
+  flex-direction: column;
+  display: flex;
+  min-height: 100vh;
+  justify-content: space-between;
+}

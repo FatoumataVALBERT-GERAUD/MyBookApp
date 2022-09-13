@@ -56,7 +56,7 @@ class BookType extends AbstractType
                 ],
                 'multiple' => true,
                 'mapped' => false, // not linked to the database
-                'required' => true
+                // 'required' => true
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

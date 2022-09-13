@@ -26,7 +26,7 @@ class BookListController extends AbstractController
     public function index(BookListRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $booklists = $paginator->paginate(
-        $repository->findAll(),
+        $repository->findBy(['user' => $this->getUser()]),
         $request->query->getInt('page', 1), /*page number*/
         10 /*limit per page*/
         );
@@ -52,6 +52,7 @@ class BookListController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
             $booklist = $form->getData();
+            $booklist->setUser($this->getUser());
 
             $manager->persist($booklist);
             $manager->flush();

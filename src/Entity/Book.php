@@ -34,6 +34,10 @@ class Book
     #[ORM\OneToMany(mappedBy: 'book', targetEntity: Covers::class, orphanRemoval: true, cascade: ["persist"])]
     private $covers;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'books')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
+
     /**
      * Constructor
      */
@@ -117,5 +121,17 @@ class Book
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

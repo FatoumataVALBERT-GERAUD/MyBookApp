@@ -26,11 +26,27 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        //Book
+        //Users
+        $users = [];
+        for ($i = 0; $i < 10; $i++) {
+            $user = new User();
+            $user->setFullName($this->faker->name())
+                ->setPseudo(mt_rand(0, 1) === 1 ? $this->faker->firstName() : null)
+                ->setEmail($this->faker->email())
+                ->setRoles(['ROLE_USER'])
+                ->setPlainPassword('password');
+
+            $users[] = $user;
+            $manager->persist($user);
+
+        }
+
+        //Books
         $books = [];
         for ($i = 0; $i < 50; $i++){$book = new Book();
         $book->setName($this->faker->words(3, true))
-            ->setAuthor($this->faker->words(2, true));
+            ->setAuthor($this->faker->words(2, true))
+            ->setUser($users[mt_rand(0, count($users) - 1)]);
 
         $books[] = $book;
         $manager->persist($book);
@@ -41,7 +57,8 @@ class AppFixtures extends Fixture
             $booklist = new BookList;
             $booklist->setName($this->faker->words(2, true))
                 ->setDescription($this->faker->text(50))
-                ->setIsFavorite(mt_rand(0, 1) == 1 ? true : false);
+                ->setIsFavorite(mt_rand(0, 1) == 1 ? true : false)
+                ->setUser($users[mt_rand(0, count($users) - 1)]);
 
             for ($k=0; $k < mt_rand(3, 5); $k++) {
                 $booklist->addBook($books[mt_rand(0, count($books) - 1)]);
@@ -50,19 +67,6 @@ class AppFixtures extends Fixture
 
             $booklists[] = $booklist;
             $manager->persist($booklist);
-        }
-
-        //Users
-        for ($i = 0; $i < 10; $i++) {
-            $user = new User();
-            $user->setFullName($this->faker->name())
-                ->setPseudo(mt_rand(0, 1) === 1 ? $this->faker->firstName() : null)
-                ->setEmail($this->faker->email())
-                ->setRoles(['ROLE_USER'])
-                ->setPlainPassword('password');
-
-            $manager->persist($user);
-
         }
 
         $manager->flush();

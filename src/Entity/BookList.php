@@ -42,6 +42,10 @@ class BookList
     #[ORM\ManyToMany(targetEntity: Book::class)]
     private $books;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'booklists')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
+
     public function __construct()
     {
         $this->books = new ArrayCollection();
@@ -140,6 +144,18 @@ class BookList
     public function removeBook(Book $book): self
     {
         $this->books->removeElement($book);
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
