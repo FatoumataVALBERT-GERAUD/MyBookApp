@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}MyBookApp - Book lists{% endblock %}
+{% block title %}MyBookApp - My book lists{% endblock %}
 
 {% block body %}
 <div class="container mt-4">
    {% if not booklists.items is same as([]) %}
-    <h1>My booklists</h1>
+    <h1>My book lists</h1>
 
     <a href="{{ path('booklist.new') }}" class="btn btn-outline-primary mt-4">
     Add a book list
@@ -19,7 +19,7 @@
       {% endfor %}
 
     <div class="fs-4 count mt-4">
-    There is {{ booklists.getTotalItemCount }} book list.
+    You have {{ booklists.getTotalItemCount }} book list
     </div>
 
     {# <table class="table table-hover">
