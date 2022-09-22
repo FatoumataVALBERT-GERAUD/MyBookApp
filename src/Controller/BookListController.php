@@ -7,6 +7,8 @@ use App\Form\BookListType;
 use App\Repository\BookListRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +24,7 @@ class BookListController extends AbstractController
      * @param Request $request
      * @return Response
      */
+    #[IsGranted('ROLE_USER')]
     #[Route('/booklist', name: 'booklist.index', methods: ['GET'])]
     public function index(BookListRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -43,6 +46,7 @@ class BookListController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
+    #[IsGranted('ROLE_USER')]
     #[Route('/booklist/create', name: 'booklist.new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $manager): Response
     {
@@ -78,6 +82,7 @@ class BookListController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
+    #[Security("is_granted('ROLE_USER') and user === booklist.getUser()")]
     #[Route('booklist/edit/{id}', 'booklist.edit', methods: ['GET', 'POST'])]
     public function edit(
         BookList $booklist,

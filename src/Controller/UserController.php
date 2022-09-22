@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserPasswordType;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,28 +18,21 @@ class UserController extends AbstractController
     /**
      * This controller allow us to edit user information
      *
-     * @param User $user
+     * @param User $chosenUser
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param UserPasswordHasherInterface $hasher
      * @return Response
      */
+    #[Security("is_granted('ROLE_USER') and user === chosenUser")]
     #[Route('/user/edit/{id}', name: 'user.edit', methods:['GET', 'POST'])]
-    public function edit(User $user, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
+    public function edit(User $chosenUser, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
     {
-        if(!$this->getUser()) {
-            return $this->redirectToRoute('security.login');
-        }
-
-        if($this->getUser() !== $user) {
-            return $this->redirectToRoute('booklist.index');
-        }
-
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $chosenUser);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            if($hasher->isPasswordValid($user, $form->getData()->getPlainPassword())) {
+            if($hasher->isPasswordValid($chosenUser, $form->getData()->getPlainPassword())) {
                 $user = $form->getData();
                 $manager->persist($user);
                 $manager->flush();
@@ -65,30 +59,23 @@ class UserController extends AbstractController
     /**
      * This Controller allow us to edit user's password
      *
-     * @param User $user
+     * @param User $chosenUser
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param UserPasswordHasherInterface $hasher
      * @return Response
      */
+    #[Security("is_granted('ROLE_USER') and user === chosenUser")]
     #[Route('/user/edit-password/{id}', name: 'user.edit.password', methods: ['GET', 'POST'])]
-    public function editPassword(User $user, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
+    public function editPassword(User $chosenUser, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
     {
-        if(!$this->getUser()) {
-            return $this->redirectToRoute('security.login');
-        }
-
-        if($this->getUser() !== $user) {
-            return $this->redirectToRoute('booklist.index');
-        }
-
         $form = $this->createForm(UserPasswordType::class);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            if($hasher->isPasswordValid($user, $form->getData()['plainPassword'])) {
-                $user->setUpdatedAt(new \DateTimeImmutable());
-                $user->setPlainPassword(
+            if($hasher->isPasswordValid($chosenUser, $form->getData()['plainPassword'])) {
+                $chosenUser->setUpdatedAt(new \DateTimeImmutable());
+                $chosenUser->setPlainPassword(
                         $form->getData()['newPassword']
                 );
 
@@ -97,9 +84,9 @@ class UserController extends AbstractController
                     'The password has been edited'
                 );
 
-                $manager->persist($user);
+                $manager->persist($chosenUser);
                 $manager->flush();
-                
+
                 return $this->redirectToRoute('booklist.index');
             }else{
                 $this->addFlash(

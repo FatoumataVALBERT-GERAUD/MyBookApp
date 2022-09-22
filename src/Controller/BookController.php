@@ -5,13 +5,15 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Entity\Covers;
 use App\Form\BookType;
-use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManager;
+use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BookController extends AbstractController
@@ -25,6 +27,7 @@ class BookController extends AbstractController
      * @return Response
      */
     #[Route('/book', name: 'book.index', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     //injection de dépendance
     public function index(BookRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -45,6 +48,7 @@ class BookController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
+    #[IsGranted('ROLE_USER')]
     #[Route("/book/new", 'book.new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
@@ -100,6 +104,7 @@ class BookController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
+    #[Security("is_granted('ROLE_USER') and user === book.getUser()")]
     #[Route('book/edit/{id}', 'book.edit', methods: ['GET', 'POST'])]
     public function edit(
         Book $book,
