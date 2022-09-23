@@ -26,8 +26,8 @@ class BookController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Route('/book', name: 'book.index', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
+    #[Route('/book', name: 'book.index', methods: ['GET'])]
     //injection de dépendance
     public function index(BookRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {

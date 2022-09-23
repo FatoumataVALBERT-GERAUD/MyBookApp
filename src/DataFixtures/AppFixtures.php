@@ -53,11 +53,12 @@ class AppFixtures extends Fixture
         }
 
         //Booklists
-        for ($i=0; $i < 3; $i++) {
+        for ($i=0; $i < 15; $i++) {
             $booklist = new BookList;
             $booklist->setName($this->faker->words(2, true))
                 ->setDescription($this->faker->text(50))
                 ->setIsFavorite(mt_rand(0, 1) == 1 ? true : false)
+                ->setIsPublic(mt_rand(0, 1) == 1 ? true : false)
                 ->setUser($users[mt_rand(0, count($users) - 1)]);
 
             for ($k=0; $k < mt_rand(3, 5); $k++) {

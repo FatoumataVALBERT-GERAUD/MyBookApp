@@ -22,6 +22,26 @@ class BookListRepository extends ServiceEntityRepository
     }
 
     /**
+     * This Method allow us to find public booklists based on the number of booklists
+     *
+     * @param integer $nbBooklists
+     * @return array
+     */
+    public function findPublicBooklist(?int $nbBooklists): array
+    {
+        $queryBuilder = $this->createQueryBuilder('b')
+            ->where('b.isPublic = 1')
+            ->orderBy('b.createdAt', 'DESC');
+
+        if($nbBooklists !== 0 || $nbBooklists !== null) {
+            $queryBuilder->setMaxResults($nbBooklists);
+        }
+
+        return $queryBuilder->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @throws ORMException
      * @throws OptimisticLockException
      */

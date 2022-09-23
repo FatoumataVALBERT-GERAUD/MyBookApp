@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MyBookApp - {{ booklist.name }}{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <h1 class="mt-4">{{ booklist.name }}</h1>
+    <span class="badge bg-primary">
+    Created the {{ booklist.createdAt|date ("d/m/Y") }}
+    </span>
+    <p>{{ booklist.description|raw }}</p>
+    <p class="mt-4">Books</p>
+    {% for book in booklist.books %}
+    <span class="badge bg-primary">
+    {{ book.name }}
+    </span>
+    {% endfor %}
+  </div>
+{% endblock %}

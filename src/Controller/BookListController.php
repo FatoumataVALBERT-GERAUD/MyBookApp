@@ -39,6 +39,35 @@ class BookListController extends AbstractController
         ]);
     }
 
+    #[Route('/booklist/public', name: 'booklist.index.public', methods: ['GET'])]
+    public function indexPublic(PaginatorInterface $paginator, BookListRepository $repository, Request $request) :Response
+    {
+        $booklists = $paginator->paginate(
+            $repository->findPublicBooklist(null),
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+        return $this->render('pages/book_list/index_public.html.twig', [
+            'booklists' => $booklists,
+        ]);
+    }
+
+
+    /**
+     * This Controller display a booklist if it is public
+     *
+     * @param BookList $booklist
+     * @return Response
+     */
+    #[Security("is_granted('ROLE_USER') and booklist.getIsPublic() === true")]
+    #[Route('/booklist/{id}', name: 'booklist.show', methods: ['GET'])]
+    public function show(BookList $booklist): Response
+    {
+        return $this->render('pages/book_list/show.html.twig', [
+            'booklist' => $booklist
+        ]);
+    }
+
     /**
      * This Controller allow us to create a new booklist
      *

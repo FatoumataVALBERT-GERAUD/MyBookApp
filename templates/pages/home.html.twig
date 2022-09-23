@@ -8,9 +8,30 @@
         <div class="jumbotron">
           <h1 class="display-4">Welcome to MyBookList</h1>
           <p class="lead">With this app you can create book lists from book created by you. You'll can share your book lists or keep them private</p>
-          <hr class="my-4">
+          <hr class="my-3">
           <p>To start, go to the sign in page</p>
           <a class="btn btn-primary btn-lg" href="{{ path('security.login') }}" role="button">Sign In</a>
+        </div>
+
+        <h2 class="mt-4">Public book lists</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          {% for booklist in booklists %}
+
+            <div class="col">
+                <div class="card border-primary mb-3" style="max-width: 20rem ; max-height: 12rem">
+                  <div class="card-header">Booklist n° {{ booklist.id }}</div>
+                  <div class="card-body">
+                    <h4 class="card-title">{{ booklist.name }}</h4>
+                    <p class="card-subtitle">{{ booklist.description }}</p>
+                    <div class="card-footer text-muted">
+                      {{ booklist.createdAt|date("d/m/Y") }}
+                      {{ booklist.updatedAt|date("d/m/Y") }}
+                      {% if booklist.isFavorite == 1 %}<i class="bi bi-heart-fill"></i>{% else %}<i class="bi bi-heart"></i>{% endif %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+        {% endfor %}
         </div>
     </div>
 {% endblock %}
